@@ -48,5 +48,7 @@ android {
         implementation 'com.google.android.exoplayer:exoplayer-hls:2.12.1'
         implementation 'com.google.android.exoplayer:exoplayer-dash:2.12.1'
         implementation 'com.google.android.exoplayer:exoplayer-smoothstreaming:2.12.1'
+        implementation 'com.google.android.exoplayer:extension-mediasession:2.12.1'
+        // implementation files('C:\\flutter\\flutter\\bin\\cache\\artifacts\\engine\\android-x64\\flutter.jar')
     }
 }

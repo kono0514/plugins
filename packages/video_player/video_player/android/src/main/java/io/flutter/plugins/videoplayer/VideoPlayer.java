@@ -6,6 +6,7 @@ import static com.google.android.exoplayer2.Player.REPEAT_MODE_OFF;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Build;
+import android.support.v4.media.session.MediaSessionCompat;
 import android.view.Surface;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlaybackException;
@@ -16,6 +17,7 @@ import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.Player.EventListener;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.audio.AudioAttributes;
+import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.ProgressiveMediaSource;
 import com.google.android.exoplayer2.source.dash.DashMediaSource;
@@ -41,6 +43,7 @@ final class VideoPlayer {
   private static final String FORMAT_DASH = "dash";
   private static final String FORMAT_HLS = "hls";
   private static final String FORMAT_OTHER = "other";
+  private static final String MEDIA_SESSION_TAG = "video_player_exo_session_tag";
 
   private SimpleExoPlayer exoPlayer;
 
@@ -55,6 +58,10 @@ final class VideoPlayer {
   private boolean isInitialized = false;
 
   private final VideoPlayerOptions options;
+
+  private MediaSessionCompat mediaSession;
+
+  private MediaSessionConnector mediaSessionConnector;
 
   VideoPlayer(
       Context context,
@@ -87,6 +94,11 @@ final class VideoPlayer {
     MediaSource mediaSource = buildMediaSource(uri, dataSourceFactory, formatHint, context);
     exoPlayer.setMediaSource(mediaSource);
     exoPlayer.prepare();
+
+    mediaSession = new MediaSessionCompat(context, MEDIA_SESSION_TAG);
+    mediaSession.setActive(true);
+    mediaSessionConnector = new MediaSessionConnector(mediaSession);
+    mediaSessionConnector.setPlayer(exoPlayer);
 
     setupVideoPlayer(eventChannel, textureEntry);
   }
@@ -282,6 +294,9 @@ final class VideoPlayer {
     }
     if (exoPlayer != null) {
       exoPlayer.release();
+    }
+    if (mediaSession != null) {
+      mediaSession.release();
     }
   }
 }
