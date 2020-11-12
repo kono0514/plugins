@@ -213,13 +213,14 @@ class VideoEvent {
   ///
   /// The [eventType] argument is required.
   ///
-  /// Depending on the [eventType], the [duration], [size] and [buffered]
+  /// Depending on the [eventType], the [duration], [size], [isPlaying] and [buffered]
   /// arguments can be null.
   VideoEvent({
     @required this.eventType,
     this.duration,
     this.size,
     this.buffered,
+    this.isPlaying,
   });
 
   /// The type of the event.
@@ -235,6 +236,11 @@ class VideoEvent {
   /// Only used if [eventType] is [VideoEventType.initialized].
   final Size size;
 
+  /// Status of the video
+  ///
+  /// Only used if [eventType] is [VideoEventType.isPlayingUpdate].
+  final bool isPlaying;
+
   /// Buffered parts of the video.
   ///
   /// Only used if [eventType] is [VideoEventType.bufferingUpdate].
@@ -248,6 +254,7 @@ class VideoEvent {
             eventType == other.eventType &&
             duration == other.duration &&
             size == other.size &&
+            isPlaying == other.isPlaying &&
             listEquals(buffered, other.buffered);
   }
 
@@ -256,6 +263,7 @@ class VideoEvent {
       eventType.hashCode ^
       duration.hashCode ^
       size.hashCode ^
+      isPlaying.hashCode ^
       buffered.hashCode;
 }
 
@@ -278,6 +286,9 @@ enum VideoEventType {
 
   /// The video stopped to buffer.
   bufferingEnd,
+
+  /// Updated information on the playing state.
+  isPlayingUpdate,
 
   /// An unknown event has been received.
   unknown,

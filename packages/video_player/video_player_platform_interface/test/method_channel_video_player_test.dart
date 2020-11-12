@@ -308,6 +308,32 @@ void main() {
                 }),
                 (ByteData data) {});
 
+            // TODO(cbenhagen): This has been deprecated and should be replaced
+            // with `ServicesBinding.instance.defaultBinaryMessenger` when it's
+            // available on all the versions of Flutter that we test.
+            // ignore: deprecated_member_use
+            await defaultBinaryMessenger.handlePlatformMessage(
+                "flutter.io/videoPlayer/videoEvents123",
+                const StandardMethodCodec()
+                    .encodeSuccessEnvelope(<String, dynamic>{
+                  'event': 'isPlayingUpdate',
+                  'value': false,
+                }),
+                (ByteData data) {});
+
+            // TODO(cbenhagen): This has been deprecated and should be replaced
+            // with `ServicesBinding.instance.defaultBinaryMessenger` when it's
+            // available on all the versions of Flutter that we test.
+            // ignore: deprecated_member_use
+            await defaultBinaryMessenger.handlePlatformMessage(
+                "flutter.io/videoPlayer/videoEvents123",
+                const StandardMethodCodec()
+                    .encodeSuccessEnvelope(<String, dynamic>{
+                  'event': 'isPlayingUpdate',
+                  'value': true,
+                }),
+                (ByteData data) {});
+
             return const StandardMethodCodec().encodeSuccessEnvelope(null);
           } else if (methodCall.method == 'cancel') {
             return const StandardMethodCodec().encodeSuccessEnvelope(null);
@@ -339,6 +365,14 @@ void main() {
                 ]),
             VideoEvent(eventType: VideoEventType.bufferingStart),
             VideoEvent(eventType: VideoEventType.bufferingEnd),
+            VideoEvent(
+              eventType: VideoEventType.isPlayingUpdate,
+              isPlaying: false,
+            ),
+            VideoEvent(
+              eventType: VideoEventType.isPlayingUpdate,
+              isPlaying: true,
+            ),
           ]));
     });
   });
